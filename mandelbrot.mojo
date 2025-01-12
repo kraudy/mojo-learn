@@ -7,6 +7,8 @@ from complex import ComplexFloat64, ComplexSIMD
 from python import Python
 from memory import UnsafePointer
 
+import subprocess
+
 # Note how aliases can be used to define the variable type or directly
 # the variable value (which i guess, implies the type)
 alias float_type  = DType.float32 # DType is usually used for arrays, specially for SIMD operations
@@ -66,3 +68,28 @@ def compute_mandelbrot() -> Matrix[float_type, height, width]:
         y += dy
     return matrix
 
+def show_plot[type: DType](matrix: Matrix[type, height, width]):
+    alias scale = 10
+    alias dpi = 64
+
+    np = Python.import_module("numpy")
+    plt = Python.import_module("matplotlib.pyplot")
+    colors = Python.import_module("matplotlib.colors")
+
+    numpy_array = np.zeros((height, width), np.float64)
+
+    for row in range(height):
+        for col in range(width):
+            numpy_array.itemset((row, col), matrix[row, col])
+    
+    fig = plt.figure(1, [scale, scale * height // width], dpi)
+    ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], False, 1)
+    light = colors.LightSource(315, 10, 0, 1, 1, 0)
+
+    image = light.shade(numpy_array, plt.cm.hot, colors.PowerNorm(0.3), "hsv", 0, 0, 1.5)
+    plt.imshow(image)
+    plt.axis("off")
+    plt.show()
+
+def main():
+    show_plot(compute_mandelbrot())
