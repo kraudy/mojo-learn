@@ -81,9 +81,10 @@ def show_plot[type: DType](matrix: Matrix[type, height, width]):
     for row in range(height):
         for col in range(width):
             numpy_array.itemset((row, col), matrix[row, col])
-    
+
     fig = plt.figure(1, [scale, scale * height // width], dpi)
-    ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], False, 1)
+    #ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], False, 1)
+    ax = fig.add_subplot(111, frameon=False)
     light = colors.LightSource(315, 10, 0, 1, 1, 0)
 
     image = light.shade(numpy_array, plt.cm.hot, colors.PowerNorm(0.3), "hsv", 0, 0, 1.5)
