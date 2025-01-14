@@ -43,13 +43,26 @@ struct examples:
       print(y)
 
       # Lets see how big the simd registers are on this machine
+      # 256
       print("SIMD reg size: ", simdbitwidth())
 
       z = SIMD[DType.uint8, 4](1)
       print(z)
+  
+  def __scalars(self):
+      var x = UInt8(1) # is the same as SIMD[DType.uitnt8, 1]
+
+      #x = "will cause an error"
+
+      np = Python.import_module("numpy")
+      arr = np.ndarray([5])
+      print(arr)
+      arr = "this works fine"
+      print(arr)
       
 
 def main():
     var ex = examples()
     ex.__types()
     ex.__simd()
+    ex.__scalars()
