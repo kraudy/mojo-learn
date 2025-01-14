@@ -104,9 +104,36 @@ def __bool():
     
     #raise Error("error")
 
+def exersices():
+    py = Python.import_module("builtins")
+    math = Python.import_module("math")
+    print("=" * 80)
+    x = Python.evaluate("2 ** 8")
+    print(x)
+    print(py.type(x))
+    print(py.id(x))
+    # var pi = float(math.pi)
+    var pi = math.pi
+    print(py.type(pi))
+    print(py.id(pi))
+    print(pi)
+
+    var f1 = SIMD[DType.float64, 1](2.0)
+    var f2 = Float64(2.0)
+
+    var f5 = f1 * f2
+    print(f5)
+
+    for i in range(4):
+        var matrix = SIMD[DType.uint8, 4](0)
+        matrix[i] = 1
+        print(matrix)
+
 def main():
     __types()
     __simd()
     __scalars()
     __strings()
     __bool()
+    
+    exersices()
