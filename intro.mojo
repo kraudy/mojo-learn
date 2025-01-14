@@ -64,14 +64,14 @@ def __strings():
     decimal = ord(s[0])
     print(decimal)
     
-    var word = List[Int8]()
+    # I opened this issue: https://github.com/modularml/mojo/issues/3947
+    # var word = List[Int8]()
+    var word = List[UInt8]()
     word.append(78)
     word.append(79)
     word.append(0) # Null termiante string, like in C
-    #print(word) error
-    # This is giving an error conversion
-    # I opened this issue: https://github.com/modularml/mojo/issues/3947
-    #var word_str = String(word) # This should make a cpy, aka another pointer
+    var word_str = String(word) # This should make a cpy, aka another pointer
+    print(word_str) 
 
     var literal = "This is a StringLiteral"
     print(literal)
