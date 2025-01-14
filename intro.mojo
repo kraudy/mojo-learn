@@ -77,9 +77,36 @@ def __strings():
     print(literal)
     #literal = 20 # Conversion erro
 
+def __bool():
+    var bool: Bool = True
+    print(bool == False)
+    var i: Int = 2
+    print(i)
+    var list2 = List[Int]()
+    list2.append(2)
+    list2.append(4)
+    list2.append(6)
+    print(list2[i])
+    var float: FloatLiteral = 33244677779764631144466467797946.334646469
+    print(float)
+    var f32 = Float32(float)
+    print(f32)
+    var list = [1, "text"] # This can be useful for the sicp stuff
+    var item1 = list.get[1, StringLiteral]()
+    print(item1)
+    var tup = (1, "text", 3)
+    var item2 = tup.get[2, Int]()
+    print(item2)
+    var original = String("MojoDojo")
+    print(original[0:4])
+    var slice_expression = slice(0,4)
+    print(original[slice_expression])
+    
+    #raise Error("error")
 
 def main():
     __types()
     __simd()
     __scalars()
     __strings()
+    __bool()
