@@ -1,6 +1,6 @@
 from memory import Span
 from sys.info import simdwidthof
-
+from math import cos, sin, pi
 
 fn contains[
     D: DType, //
@@ -35,6 +35,8 @@ fn contains[
             for _ in range((length - processed) // w):
                 print('ptr + processed: ', ptr + processed)
                 print('(ptr + processed).load[width=w](): ', (ptr + processed).load[width=w]())
+                #print("sin: ", sin((ptr + processed).load[width=w]()))
+                #sin((ptr + processed).load[width=w]())
                 if value in (ptr + processed).load[width=w]():
                     # We load 
                     return True
