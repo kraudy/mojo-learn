@@ -27,6 +27,7 @@ fn __types():
     # The data can be packed into a vector, SIMD?
 
 def __simd(): 
+    #y = SIMD[DType.uint8, 4](1, 2, 3, 4)
     y = SIMD[DType.uint8, 4](1, 2, 3, 4)
     print(y)
     # Mojo makes distinction between parameters and arguments
