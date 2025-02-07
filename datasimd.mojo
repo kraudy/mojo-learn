@@ -13,10 +13,30 @@ from sys.info import simdwidthof
 from python import Python, PythonObject
 
 alias type = DType.float64
+alias nelts = Int(simdwidthof[type]())
 
-#TODO: Fix for n = 3 nan error
-fn linspace[n: Int = 6](start: Float64, stop: Float64) -> SIMD[type, n]:
-    #var result = SIMD[DType.float64, n]()
+fn linspace_ptr[n: Int = 6](start: Float64, stop: Float64) -> UnsafePointer[Scalar[type]]:
+    var result = UnsafePointer[Scalar[type]].alloc(n)
+    memset_zero(result, n)
+
+    var step = (stop - start) / (nelts)#Float64(n - 1)
+    #result.store(result.load[width = nelts]() * step, n)
+    for i in range(n // nelts):
+        var res = result.offset(i * nelts).load[width = nelts]() * step
+        #result[i] = start + step * Float64(i)
+        print("res in for: ", res)
+        result.offset(i * nelts).store(res)
+
+    #var res = result.load[width = nelts]() * step
+    #print("res: ",res)
+    #result.store(res)
+
+    #for i in range(n):
+    #    result[i] = start + step * Float64(i)
+
+    return result
+
+fn linspace_unsafe[n: Int = 6](start: Float64, stop: Float64) -> SIMD[type, n]:
     var result = UnsafePointer[Scalar[type]].alloc(n)
     memset_zero(result, n)
 
@@ -31,10 +51,14 @@ fn make_moons[n: Int = 6](shuffle_data: Bool = True, noise: Float64 = 0.0, rando
     print(n_samples_in)
 
 
-    var items = linspace[5](0, pi)
-
-
+    var items = linspace_unsafe[5](0, pi)
     print(items)
+
+    var items2 = linspace_ptr[8](0, pi)
+    print(items2.load[width=8]())
+
+    print("simd with * 2: ", nelts)
+
 
 fn main():
     make_moons()
