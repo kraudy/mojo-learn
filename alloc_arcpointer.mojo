@@ -35,7 +35,32 @@ fn arcpointer_example():
     # ArcPointer will free the memory when it goes out of scope
     #raw_ptr.free()
 
+struct FloatArray:
+    var ptr: ArcPointer[UnsafePointer[Float64]]
+    var size: Int
+
+    fn __init__(mut self, size: Int):
+        var raw_ptr = UnsafePointer[Float64].alloc(size)
+        self.ptr = ArcPointer[UnsafePointer[Float64]](raw_ptr)
+        # one liner
+        # self.ptr = ArcPointer[UnsafePointer[Float64]](UnsafePointer[Float64].alloc(size))
+        self.size = size
+
+  # No __del__ needed; ArcPointer handles deallocation
+
+fn arcpointer_unsafepointer_example():
+    # Create a FloatArray with ArcPointer-managed memory
+    var array = FloatArray(3)
+    array.ptr[][0] = 1.0  # Dereference to UnsafePointer for assignment
+    array.ptr[][1] = 2.5
+    array.ptr[][2] = 3.7
+
+    # Iterate over the elements
+    for i in range(array.size):
+        print(array.ptr[][i])
+
 fn main():
     unsafe_example()
     arcpointer_example()
+    arcpointer_unsafepointer_example()
     
