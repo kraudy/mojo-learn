@@ -10,6 +10,9 @@ from utils.index import Index
 from memory import Span, ArcPointer, UnsafePointer, memset_zero
 from sys.info import simdwidthof
 
+from time import time
+from benchmark import benchmark
+
 from python import Python, PythonObject
 
 alias type = DType.float64
@@ -19,20 +22,15 @@ fn linspace_ptr[n: Int = 6](start: Float64, stop: Float64) -> UnsafePointer[Scal
     var result = UnsafePointer[Scalar[type]].alloc(n)
     memset_zero(result, n)
 
-    var step = (stop - start) / (nelts)#Float64(n - 1)
-    #result.store(result.load[width = nelts]() * step, n)
-    for i in range(n // nelts):
-        var res = result.offset(i * nelts).load[width = nelts]() * step
-        #result[i] = start + step * Float64(i)
+    # Getting the average 
+    var step = (stop - start) / Float64(n - 1)
+    for i in range(0, n, nelts):
+        #var res = result.offset(i * nelts).load[width = nelts]() * step
+        var res = result.offset(i * nelts).load[width = nelts]() + (start) 
+        var offset = SIMD[DType.float64, nelts](i, i+1, i+2, i+3)
+        res = step * offset
         print("res in for: ", res)
-        result.offset(i * nelts).store(res)
-
-    #var res = result.load[width = nelts]() * step
-    #print("res: ",res)
-    #result.store(res)
-
-    #for i in range(n):
-    #    result[i] = start + step * Float64(i)
+        result.offset(i).store(res)
 
     return result
 
@@ -50,12 +48,15 @@ fn make_moons[n: Int = 6](shuffle_data: Bool = True, noise: Float64 = 0.0, rando
     var n_samples_in = n - n_samples_out
     print(n_samples_in)
 
-
     var items = linspace_unsafe[5](0, pi)
     print(items)
 
     var items2 = linspace_ptr[8](0, pi)
+    var lista = List[Float64]()
+    for i in range(8):  # Assuming width=8 means 8 elements
+      lista.append(items2[i])
     print(items2.load[width=8]())
+    print(len(lista))
 
     print("simd with * 2: ", nelts)
 
